@@ -15,6 +15,7 @@ class AuthTest extends TestCase
     {
         $response = $this->post('/register', [
             'name' => 'John Doe',
+            'username' => 'John',
             'email' => 'john@example.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
@@ -51,6 +52,7 @@ class AuthTest extends TestCase
     {
         $response = $this->post('/register', [
             'name' => 'John Doe',
+            'username' => 'John',
             'email' => 'invalid-email',
             'password' => 'short',
             'password_confirmation' => 'short',
