@@ -23,6 +23,7 @@ class TransactionControllerTest extends TestCase
             'book_id' => $book->id,
             'quantity' => 2,
             'shipping_address' => $address->address,
+            'transaction_type' => 'purchase',
         ]);
 
         // Verifikasi redirect dan status code
@@ -38,6 +39,7 @@ class TransactionControllerTest extends TestCase
             'quantity' => 2,
             'shipping_address' => $address->address,
             'shipping_status' => 'pending', // Status pengiriman awal
+            'transaction_type' => 'purchase',
         ]);
 
         // Verifikasi stok buku berkurang
@@ -58,6 +60,7 @@ class TransactionControllerTest extends TestCase
             'book_id' => $book->id,
             'quantity' => 2,
             'shipping_address' => $address->address,
+            'transaction_type' => 'purchase',
         ]);
 
         // Verifikasi error yang muncul

@@ -16,6 +16,7 @@ class TransactionController extends Controller
             'book_id' => 'required|exists:books,id',
             'quantity' => 'required|integer|min:1',
             'shipping_address' => 'required|string',
+            'transaction_type' => 'required|in:purchase,borrow',
         ]);
 
         $book = Book::findOrFail($request->book_id);
@@ -33,6 +34,7 @@ class TransactionController extends Controller
             'total_price' => $book->price * $request->quantity,
             'shipping_address' => $request->shipping_address,
             'shipping_status' => 'pending', // Status pengiriman awal
+            'transaction_type' => 'purchase',
         ]);
 
         // Kurangi stok buku

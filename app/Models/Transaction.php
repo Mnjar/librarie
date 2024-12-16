@@ -20,7 +20,11 @@ class Transaction extends Model
         'due_date',
         'return_date',
         'fine',
-        // 'reservation_status',
+        'image',
+        'payment_status',
+        'payment_url',
+        'payment_token',
+        'midtrans_transaction_id',
     ];
 
     public function user()
