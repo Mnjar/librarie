@@ -47,9 +47,4 @@ class User extends Authenticatable
                     ->get()
                     ->pluck('book'); // Mengambil hanya data buku
     }
-    // public function booksFromTransactions()
-    // {
-    //     return $this->hasManyThrough(Book::class, Transaction::class);
-    // }
-
 }

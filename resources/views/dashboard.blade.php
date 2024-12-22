@@ -13,7 +13,7 @@
      <h2 class="text-xl font-bold mb-4">Book List</h2>
      <div class="flex flex-wrap mb-6 justify-center md:justify-start">
         @foreach ($books as $book)
-        <a href="">
+        <a href="{{ route('product', $book->id) }}">
             <div class="max-w-44 m-5 bg-white p-4 rounded-lg shadow">
                 <img alt="A New Program for Graphic Design book cover" class="w-full h-auto mb-2" height="150" src="{{ $book->image }}" width="100"/>
                 <p class="text-sm">{{ $book->title }}</p>

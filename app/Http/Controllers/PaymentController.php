@@ -8,82 +8,46 @@ use App\Models\User;
 use Midtrans\Snap;
 use Midtrans\Config;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
-    public function __construct()
+    public function store(Request $request)
     {
-        // Set konfigurasi Midtrans
-        Config::$serverKey = config('services.midtrans.server_key');
-        Config::$clientKey = config('services.midtrans.client_key');
-        Config::$isProduction = config('services.midtrans.is_production');
-        Config::$isSanitized = true;
-        Config::$is3ds = true;
-    }
+        $validated = $request->validate([
+            'book_id' => 'required|exists:books,id',
+            'transaction_type' => 'required|in:purchase,borrow',
+        ]);
 
-    // Fungsi untuk memproses pembayaran
-    public function createTransaction(Request $request)
-    {
-        $book = Book::findOrFail($request->book_id);
-        $user = User::findOrFail($request->user_id);
+        // Mendapatkan buku yang dipilih
+        $book = Book::findOrFail($validated['book_id']);
 
-        // Tentukan detail transaksi
-        $transaction_details = [
-            'order_id' => 'ORDER-' . time(),
-            'gross_amount' => $book->price * $request->quantity, // Total harga
-        ];
+        // Membuat transaksi baru
+        $transaction = Transaction::create([
+            'user_id' => Auth::id(),
+            'book_id' => $book->id,
+            'transaction_type' => $validated['transaction_type'],
+            'quantity' => 1, // Asumsikan 1 buku per transaksi
+            'transaction_date' => now(),
+            'payment_status' => 'pending', // Status awal pembayaran
+            'payment_url' => null, // Akan diisi nanti jika menggunakan Midtrans
+            'payment_token' => null, // Akan diisi nanti jika menggunakan Midtrans
+            'midtrans_transaction_id' => null, // ID transaksi Midtrans jika diperlukan
+        ]);
 
-        $customer_details = [
-            'first_name' => $user->name,
-            'email' => $user->email,
-            'phone' => $user->phone,
-        ];
+        // Jika transaksi adalah pembelian, lanjutkan ke pembayaran menggunakan Midtrans
+        if ($validated['transaction_type'] == 'purchase') {
+            // Logika untuk mengarahkan ke Midtrans
+            // Bisa menggunakan Midtrans SDK untuk menghasilkan token pembayaran
+            // dan mendapatkan URL pembayaran
 
-        $transaction = [
-            'transaction_details' => $transaction_details,
-            'customer_details' => $customer_details,
-        ];
-
-        try {
-            // Menggunakan Snap API untuk mendapatkan token pembayaran
-            $snapToken = Snap::getSnapToken($transaction);
-
-            // Simpan informasi transaksi ke database
-            $transaction = Transaction::create([
-                'user_id' => $user->id,
-                'book_id' => $book->id,
-                'transaction_type' => $request->transaction_type,
-                'quantity' => $request->quantity,
-                'payment_token' => $snapToken,
-                'payment_url' => $request->payment_url,
-            ]);
-
-            return response()->json(['snap_token' => $snapToken, 'payment_url' => $transaction->payment_url]);
-
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    // Fungsi untuk menangani notifikasi pembayaran
-    public function notification(Request $request)
-    {
-        $notification = $request->all();
-        $transaction = Transaction::where('midtrans_transaction_id', $notification['order_id'])->first();
-
-        if ($transaction) {
-            // Menangani status pembayaran
-            if ($notification['transaction_status'] == 'settlement') {
-                $transaction->payment_status = 'paid';
-            } else if ($notification['transaction_status'] == 'pending') {
-                $transaction->payment_status = 'pending';
-            } else if ($notification['transaction_status'] == 'cancel') {
-                $transaction->payment_status = 'cancelled';
-            }
+            // Misalnya, set payment_url dengan URL Midtrans
+            $transaction->payment_url = 'https://midtrans-payment-url.com';
             $transaction->save();
         }
 
-        return response()->json(['status' => 'success']);
+        // Redirect ke halaman konfirmasi atau detail transaksi
+        return redirect()->route('transactions.show', $transaction->id);
     }
 }
 
