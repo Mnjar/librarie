@@ -44,6 +44,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reservations/update-status-by-system', [ReservationController::class, 'updateStatusBySystem']);
 });
 
+Route::get('/product/{id}', [BookController::class, 'show'])->name('product');
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
@@ -53,6 +55,16 @@ Route::middleware(['auth'])->group(function () {
 
 Route::post('/payment/create', [PaymentController::class, 'createTransaction']);
 Route::post('/payment/notification', [PaymentController::class, 'notification']);
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/transactions/create', [TransactionController::class, 'create'])->name('transactions.create');
+    Route::post('/transactions/store', [TransactionController::class, 'store'])->name('transactions.store');
+    Route::get('/transactions/success', [TransactionController::class, 'success'])->name('transactions.success');
+    Route::post('/midtrans/notification', [TransactionController::class, 'notificationHandler'])->name('midtrans.notification');
+});
+
+
+
 
 
 

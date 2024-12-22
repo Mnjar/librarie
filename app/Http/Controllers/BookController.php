@@ -16,7 +16,11 @@ class BookController extends Controller
     // Menampilkan detail buku
     public function show($id)
     {
-        return Book::findOrFail($id);
+        // Ambil data buku berdasarkan ID
+        $book = Book::findOrFail($id);
+
+        // Tampilkan halaman detail buku
+        return view('product', compact('book'));
     }
 
     // Menyimpan buku baru

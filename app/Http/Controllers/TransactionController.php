@@ -6,40 +6,98 @@ use App\Models\Book;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Midtrans\Snap;
+use Midtrans\Config;
 
 class TransactionController extends Controller
 {
-    public function index(Request $request)
+    public function create(Request $request)
     {
-        // Validasi data yang diterima
+        $book = Book::findOrFail($request->book_id);
+        return view('transactions.create', compact('book', 'request'));
+    }
+
+
+    public function store(Request $request)
+    {
         $request->validate([
             'book_id' => 'required|exists:books,id',
-            'quantity' => 'required|integer|min:1',
-            'shipping_address' => 'required|string',
             'transaction_type' => 'required|in:purchase,borrow',
+            'quantity' => 'required|integer|min:1',
+            'shipping_address' => 'required|exists:addresses,id', // Validasi alamat
         ]);
 
         $book = Book::findOrFail($request->book_id);
+        $user = Auth::user();
 
-        // Cek apakah stok buku cukup
-        if ($book->stock < $request->quantity) {
-            return back()->withErrors(['message' => 'Stok buku tidak cukup.']);
-        }
+        // Ambil alamat yang dipilih pengguna
+        $address = $user->address()->findOrFail($request->shipping_address);
 
-        // Buat transaksi baru
+        // Buat transaksi
         $transaction = Transaction::create([
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
             'book_id' => $book->id,
+            'transaction_type' => $request->transaction_type,
             'quantity' => $request->quantity,
-            'total_price' => $book->price * $request->quantity,
-            'shipping_address' => $request->shipping_address,
-            'shipping_status' => 'pending', // Status pengiriman awal
-            'transaction_type' => 'purchase',
+            'transaction_date' => now(),
+            'shipping_address' => $address->address,
+            'payment_status' => 'pending',
         ]);
 
-        // Kurangi stok buku
-        $book->decrement('stock', $request->quantity);
+        // Konfigurasi Midtrans
+        Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
 
-        return redirect()->route('transactions.index')->with('success', 'Pembelian berhasil dilakukan.');
+        $params = [
+            'transaction_details' => [
+                'order_id' => $transaction->id,
+                'gross_amount' => $book->price * $request->quantity,
+            ],
+            'customer_details' => [
+                'first_name' => $user->name,
+                'email' => $user->email,
+            ],
+        ];
+
+        // $snapToken = Snap::getSnapToken($params);
+
+        // $transaction->update([
+        //     'payment_token' => $snapToken,
+        //     'payment_url' => Snap::createTransaction($params)->redirect_url,
+        // ]);
+
+        // return response()->json([
+        //     'payment_token' => $snapToken,
+        //     'payment_url' => $transaction->payment_url,
+        // ]);
+
+        // Dapatkan Snap Token
+        $snapToken = Snap::getSnapToken($params);
+
+        return response()->json([
+            'snap_token' => $snapToken,
+        ]);
     }
+
+
+
+    public function notificationHandler(Request $request)
+    {
+        $notification = new \Midtrans\Notification();
+
+        $transaction = Transaction::findOrFail($notification->order_id);
+
+        if ($notification->transaction_status == 'settlement') {
+            $transaction->update(['payment_status' => 'paid']);
+        } elseif ($notification->transaction_status == 'pending') {
+            $transaction->update(['payment_status' => 'pending']);
+        } elseif ($notification->transaction_status == 'deny' || $notification->transaction_status == 'expire') {
+            $transaction->update(['payment_status' => 'failed']);
+        }
+
+        return response()->json(['message' => 'Notification handled']);
+    }
+
 }
