@@ -36,7 +36,7 @@
         <td class="py-4">
             <input class="mr-2" type="checkbox"/>
         </td>
-        
+
     </tr>
     <tr class="border-t">
         <td class="py-4 flex items-center">
@@ -54,7 +54,7 @@
         <td class="py-4">
             <input class="mr-2" type="checkbox"/>
         </td>
-        
+
     </tr>
     <tr class="border-t">
         <td class="py-4 flex items-center">
