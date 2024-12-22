@@ -19,7 +19,7 @@ class DashboardController extends Controller
         
         // dd($booksFromTransactions);
 
-        return view('dashboard', compact('booksFromTransactions', 'books', 'user'));
+        return view('product', compact('booksFromTransactions', 'books', 'user'));
     }
 
 }
