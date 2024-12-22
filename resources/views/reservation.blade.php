@@ -4,9 +4,6 @@
 <div class="flex-1 p-6 bg-gray-100 sm:ml-64 mt-12">
     <div class="flex justify-between items-center mb-6">
      <input class="w-1/2 p-2 border border-gray-300 rounded" placeholder="Search your book" type="text"/>
-     <div class="flex items-center space-x-4">
-      <span class="text-gray-600">Thursday, 4 Desember 2024</span>
-     </div>
     </div>
     <div class="bg-white p-4 rounded shadow">
      <table class="w-full">

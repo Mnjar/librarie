@@ -8,7 +8,6 @@
 <div class="flex-1 p-6 mt-12 sm:ml-64">
     <div class="flex justify-center md:justify-between flex-col md:flex-row items-center mb-6">
      <input class="w-1/2 p-2 border border-gray-300 rounded" placeholder="Search your book" type="text"/>
-     <span class="text-gray-600 pt-5 md:pt-0">Thursday, 4 December 2024</span>
     </div>
     <div>
      <h2 class="text-xl font-bold mb-4">Book List</h2>
