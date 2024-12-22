@@ -20,6 +20,8 @@ return new class extends Migration
             $table->integer('stock');
             $table->decimal('price', 8, 2)->nullable();
             $table->text('description')->nullable();
+            $table->string('image')->nullable();
+            $table->integer('rating')->nullable();
             $table->timestamps();
         });
     }

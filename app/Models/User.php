@@ -38,4 +38,18 @@ class User extends Authenticatable
     {
         return $this->hasMany(Address::class);
     }
+
+    // Mendapatkan daftar buku yang terlibat dalam transaksi pengguna
+    public function booksFromTransactions()
+    {
+        return $this->hasMany(Transaction::class)
+                    ->with('book') // Memuat relasi book di transaksi
+                    ->get()
+                    ->pluck('book'); // Mengambil hanya data buku
+    }
+    // public function booksFromTransactions()
+    // {
+    //     return $this->hasManyThrough(Book::class, Transaction::class);
+    // }
+
 }

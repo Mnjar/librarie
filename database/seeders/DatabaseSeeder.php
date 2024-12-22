@@ -10,8 +10,11 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        // Membuat kategori dan buku
-        Category::factory(5)->create(); // Membuat 5 kategori
-        Book::factory(10)->create(); // Membuat 10 buku
+        $this->call([
+            BookSeeder::class,
+            UserSeeder::class,
+            TransactionSeeder::class,
+            ReservationSeeder::class,
+        ]);
     }
 }

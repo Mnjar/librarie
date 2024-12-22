@@ -23,7 +23,6 @@ return new class extends Migration
             $table->date('due_date')->nullable();
             $table->date('return_date')->nullable();
             $table->decimal('fine', 8, 2)->nullable();
-            $table->string('image')->nullable();
             $table->string('payment_status')->nullable();  // Status pembayaran
             $table->string('payment_url')->nullable();     // URL untuk pembayaran Midtrans
             $table->string('payment_token')->nullable();   // Token pembayaran Midtrans
