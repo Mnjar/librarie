@@ -10,7 +10,7 @@ use App\Http\Controllers\AddressController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('user-home');
+    return view('finest');
 });
 
 Route::get('/dashboard', function () {
