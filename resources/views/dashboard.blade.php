@@ -17,7 +17,8 @@
         <a href="">
             <div class="max-w-44 m-5 bg-white p-4 rounded-lg shadow">
                 <img alt="A New Program for Graphic Design book cover" class="w-full h-auto mb-2" height="150" src="{{ $book->image }}" width="100"/>
-                <p class="text-sm">{{ $book->title }}<br/>{{ $book->author }}</p>
+                <p class="text-sm">{{ $book->title }}</p>
+                <p class="text-xs text-gray-500">{{ $book->author }}</p>
             </div>
         </a>
         @endforeach
@@ -29,7 +30,9 @@
         @foreach ($booksFromTransactions as $book)
         <div class="max-w-44 m-5 bg-white p-4 rounded-lg shadow">
             <img alt="It Ends with Us book cover" class="w-full h-auto mb-2" height="150" src="{{ $book->image }}" width="100"/>
-            <p class="text-sm">{{ $book->title }}<br/>{{ $book->author }}</p><p class="text-sm">189 Pages</p>
+            <p class="text-sm">{{ $book->title }}</p>
+            <p class="text-xs text-gray-500">{{ $book->author }}</p>
+            <p class="text-sm">189 Pages</p>
             <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
              <div class="bg-blue-600 h-2.5 rounded-full" style="width: 80%">
              </div>
