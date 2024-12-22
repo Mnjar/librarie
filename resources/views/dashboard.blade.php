@@ -26,31 +26,16 @@
     <div>
      <h2 class="text-xl font-bold mb-4">My Books</h2>
      <div class="flex flex-wrap justify-center md:justify-start mb-6">
-      <div class="max-w-44 m-5 bg-white p-4 rounded-lg shadow">
-       <img alt="It Ends with Us book cover" class="w-full h-auto mb-2" height="150" src="https://storage.googleapis.com/a1aa/image/e5QkAMdbtfht80TeWt6ZSZfO1ky8THvq5lbb1qbkCvtRwYsPB.jpg" width="100"/>
-       <p class="text-sm">It Ends with Us<br/>Colleen Hoover</p><p class="text-sm">189 Pages</p>
-       <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
-        <div class="bg-blue-600 h-2.5 rounded-full" style="width: 80%">
-        </div>
-       </div>
-      </div>
-      <div class="max-w-44 m-5 bg-white p-4 rounded-lg shadow">
-       <img alt="Design Thinking book cover" class="w-full h-auto mb-2" height="150" src="https://storage.googleapis.com/a1aa/image/XF5mLVw8Wq7kGdocDWb21j6tHWeVR3jM5WqoOs56bd79Fj9JA.jpg" width="100"/>
-       <p class="text-sm">Design Thinking<br/>Daniel Ling</p><p class="text-sm">140 Pages</p>
-       <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
-        <div class="bg-blue-600 h-2.5 rounded-full" style="width: 66%">
-        </div>
-       </div>
-      </div>
-      <div class="max-w-44 m-5 bg-white p-4 rounded-lg shadow">
-       <img alt="Just My Type book cover" class="w-full h-auto mb-2" height="150" src="https://storage.googleapis.com/a1aa/image/yQUi6yuEgqKrD9wltjfabjvPEOIBKdYiXrcaqqI9eL55LG7TA.jpg" width="100"/>
-       <p class="text-sm">Just My Type<br/>Simon Garfield</p><p class="text-sm text-yellow-500">Return until 25.10.2022</p>
-       <p class="text-sm text-blue-600">Finished</p>
-      </div>
-      <div class="max-w-44 m-5 bg-white p-4 rounded-lg shadow">
-       <img alt="How to Talk to Anyone book cover" class="w-full h-auto mb-2" height="150" src="https://storage.googleapis.com/a1aa/image/hvjfM3MBPYyekExBf8PypfvnbyMf3WnTOehtjjx8ERF6AjxeJA.jpg" width="100"/>
-       <p class="text-sm">How to Talk to Anyone<br/>Leil Lowndes</p><p class="text-sm text-red-500">Returned</p>
-      </div>
+        @foreach ($booksFromTransactions as $book)
+        <div class="max-w-44 m-5 bg-white p-4 rounded-lg shadow">
+            <img alt="It Ends with Us book cover" class="w-full h-auto mb-2" height="150" src="{{ $book->image }}" width="100"/>
+            <p class="text-sm">{{ $book->title }}<br/>{{ $book->author }}</p><p class="text-sm">189 Pages</p>
+            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
+             <div class="bg-blue-600 h-2.5 rounded-full" style="width: 80%">
+             </div>
+            </div>
+           </div>
+        @endforeach
      </div>
     </div>
    </div>
