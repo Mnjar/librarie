@@ -70,7 +70,7 @@
      </table>
     </div>
     <div class="py-3 text-purple-600">
-        <P class="text-lg font-bold">Total Price : ?</P>
+        <P class="text-lg font-bold">Total Price : Rp.360,000</P>
     </div>
     <div class="py-1 flex justify-center lg:justify-start">
         <button class="border border-purple-600 rounded-md hover:text-white hover:bg-purple-600 text-purple-600">

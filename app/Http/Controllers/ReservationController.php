@@ -10,10 +10,16 @@ use Illuminate\Support\Facades\Auth;
 class ReservationController extends Controller
 {
     // Menampilkan daftar reservasi pengguna
+    // public function index()
+    // {
+    //     $reservations = Auth::user()->reservation()->with('book')->get();
+    //     return view('reservations.index', compact('reservations'));
+    // }
+
     public function index()
     {
-        $reservations = Auth::user()->reservation()->with('book')->get();
-        return view('reservations.index', compact('reservations'));
+        // $reservations = Auth::user()->reservation()->with('book')->get();
+        return view('reservation');
     }
 
     // Membuat reservasi baru
