@@ -16,14 +16,14 @@
     </style>
 </head>
 
-<body class="bg-blue-600 flex items-center justify-center min-h-screen">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white rounded-lg shadow-lg flex flex-col md:flex-row w-full max-w-4xl">
         <div class="p-8 md:w-1/2">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold">SIGN UP</h2>
                 <a class="text-sm text-gray-500" href="{{ route('login')}}">
                     Already have an account?
-                    <span class="text-blue-600">LOGIN</span>
+                    <span class="text-purple-600">LOGIN</span>
                 </a>
             </div>
             <form method="POST" action="{{ route('register') }}">
@@ -69,13 +69,13 @@
                         class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
                         type="password" name="password_confirmation" required />
                 </div>
-                <button class="w-full bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600" type="submit">
+                <button class="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-orange-600" type="submit">
                     Sign Up
                 </button>
             </form>
         </div>
-        <div class="bg-blue-600 text-white p-8 md:w-1/2 flex flex-col justify-center items-center">
-            <img alt="Logo" class="mb-4" height="100" src="{{asset('assets/Logo.png')}} width="100" />
+        <div class="bg-purple-600 text-white p-8 md:w-1/2 flex flex-col justify-center items-center">
+            <img alt="Logo" class="mb-4" height="100" src="{{asset('assets/Logo.png')}}" width="100" />
             <h2 class="text-3xl font-bold mb-2">Explore the World</h2>
             <h3 class="text-xl mb-4">with
                 <span class="font-bold">BOOKS</span>

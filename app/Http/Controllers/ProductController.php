@@ -8,10 +8,13 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
-    public function index($id) {
-
+    public function index()
+    {
+        // Mengambil data buku dan kategori dari database
         $books = Book::all();
         $user = Auth::user();
-        return view('product', compact('books','user'));
+
+        // Mengirim data ke view
+        return view('product',compact('books','user'));
     }
 }

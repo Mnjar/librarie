@@ -13,9 +13,9 @@
         }
     </style>
 </head>
-<body class="bg-blue-600 flex items-center justify-center min-h-screen">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden max-w-4xl">
-        <div class="bg-blue-600 text-white p-8 flex flex-col items-center justify-center md:w-1/2">
+        <div class="bg-purple-600 text-white p-8 flex flex-col items-center justify-center md:w-1/2">
             <img alt="Logo" class="mb-4" height="100" src="{{asset('assets/Logo.png')}}" width="100"/>
             <h1 class="text-4xl font-bold">Welcome</h1>
             <h2 class="text-4xl font-bold">Back!</h2>
@@ -41,13 +41,13 @@
                            id="password" name="password" required type="password"/>
                     <a class="text-sm text-blue-600 float-right mt-1" href="{{ route('password.request') }}">Forgot Password?</a>
                 </div>
-                <button class="w-full bg-orange-500 text-white py-2 rounded-lg font-bold hover:bg-orange-600 transition duration-300" type="submit">
+                <button class="w-full bg-purple-600 text-white py-2 rounded-lg font-bold hover:bg-orange-600 transition duration-300" type="submit">
                     Login Now
                 </button>
             </form>
             <p class="text-center text-gray-600 mt-6">
                 Don't have an Account?
-                <a class="text-blue-600 font-bold" href="{{ route('register')}}">REGISTER</a>
+                <a class="text-purple-600 font-bold" href="{{ route('register')}}">REGISTER</a>
             </p>
         </div>
     </div>
