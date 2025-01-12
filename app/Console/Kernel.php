@@ -13,4 +13,6 @@ class Kernel extends ConsoleKernel
         // Menjadwalkan job untuk dijalankan setiap hari
         $schedule->job(new UpdateReservationStatus)->daily();
     }
+
+    
 }

@@ -26,6 +26,16 @@
                     <span class="text-purple-600">LOGIN</span>
                 </a>
             </div>
+            <!-- Display Error Messages -->
+            @if ($errors->any())
+                <div class="bg-red-100 text-red-700 p-4 rounded-lg mb-4">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <form method="POST" action="{{ route('register') }}">
                 @csrf
                 <div class="mb-4">
@@ -74,7 +84,7 @@
                 </button>
             </form>
         </div>
-        <div class="bg-purple-600 text-white p-8 md:w-1/2 flex flex-col justify-center items-center">
+        <div class="bg-blue-600 text-white p-8 md:w-1/2 flex flex-col justify-center items-center">
             <img alt="Logo" class="mb-4" height="100" src="{{asset('assets/Logo.png')}}" width="100" />
             <h2 class="text-3xl font-bold mb-2">Explore the World</h2>
             <h3 class="text-xl mb-4">with

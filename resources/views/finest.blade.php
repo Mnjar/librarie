@@ -75,7 +75,7 @@
     </div>
     <div>
         <div>
-            <p class="text-lg text-purple-600 my-4">Total : ?</p>
+            <p class="text-lg text-purple-600 my-4">Total : Rp.165,000</p>
             <button class="border-purple-600 border rounded-md text-purple-600 hover:text-white hover:bg-purple-600 w-16">
                 <p class="p-3">Pay</p>
             </button>

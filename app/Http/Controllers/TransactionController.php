@@ -17,21 +17,22 @@ class TransactionController extends Controller
         return view('transactions.create', compact('book', 'request'));
     }
 
-
     public function store(Request $request)
     {
         $request->validate([
             'book_id' => 'required|exists:books,id',
             'transaction_type' => 'required|in:purchase,borrow',
             'quantity' => 'required|integer|min:1',
-            'shipping_address' => 'required|exists:addresses,id', // Validasi alamat
+            'shipping_address' => 'required|exists:addresses,id',
         ]);
 
         $book = Book::findOrFail($request->book_id);
         $user = Auth::user();
 
-        // Ambil alamat yang dipilih pengguna
-        $address = $user->address()->findOrFail($request->shipping_address);
+        // Cek stok
+        if ($book->stock < $request->quantity) {
+            return response()->json(['message' => 'Insufficient stock'], 400);
+        }
 
         // Buat transaksi
         $transaction = Transaction::create([
@@ -40,7 +41,7 @@ class TransactionController extends Controller
             'transaction_type' => $request->transaction_type,
             'quantity' => $request->quantity,
             'transaction_date' => now(),
-            'shipping_address' => $address->address,
+            'shipping_address' => $user->address()->findOrFail($request->shipping_address)->address,
             'payment_status' => 'pending',
         ]);
 
@@ -61,27 +62,11 @@ class TransactionController extends Controller
             ],
         ];
 
-        // $snapToken = Snap::getSnapToken($params);
-
-        // $transaction->update([
-        //     'payment_token' => $snapToken,
-        //     'payment_url' => Snap::createTransaction($params)->redirect_url,
-        // ]);
-
-        // return response()->json([
-        //     'payment_token' => $snapToken,
-        //     'payment_url' => $transaction->payment_url,
-        // ]);
-
         // Dapatkan Snap Token
         $snapToken = Snap::getSnapToken($params);
 
-        return response()->json([
-            'snap_token' => $snapToken,
-        ]);
+        return response()->json(['snap_token' => $snapToken]);
     }
-
-
 
     public function notificationHandler(Request $request)
     {
@@ -91,6 +76,10 @@ class TransactionController extends Controller
 
         if ($notification->transaction_status == 'settlement') {
             $transaction->update(['payment_status' => 'paid']);
+
+            // Kurangi stok buku
+            $book = $transaction->book;
+            $book->decrement('stock', $transaction->quantity);
         } elseif ($notification->transaction_status == 'pending') {
             $transaction->update(['payment_status' => 'pending']);
         } elseif ($notification->transaction_status == 'deny' || $notification->transaction_status == 'expire') {
@@ -99,5 +88,49 @@ class TransactionController extends Controller
 
         return response()->json(['message' => 'Notification handled']);
     }
+
+    public function success()
+    {
+        return view('transactions.success');
+    }
+
+    public function successUpdate(Request $request)
+    {
+        $request->validate([
+            'transaction_id' => 'required|exists:transactions,id',
+        ]);
+
+        $transaction = Transaction::findOrFail($request->transaction_id);
+
+        if ($transaction->payment_status !== 'paid') {
+            $transaction->update(['payment_status' => 'paid']);
+
+            // Kurangi stok buku
+            $book = $transaction->book;
+            if ($book->stock >= $transaction->quantity) {
+                $book->decrement('stock', $transaction->quantity);
+            } else {
+                return response()->json(['message' => 'Insufficient stock'], 400);
+            }
+        }
+
+        return response()->json(['message' => 'Stock updated successfully']);
+    }
+
+    public function index()
+    {
+        // Ambil ID pengguna yang sedang login
+        $userId = Auth::id();
+
+        // Ambil semua transaksi berdasarkan user_id
+        $transactions = Transaction::where('user_id', $userId)
+            ->with(['book', 'fine'])
+            ->orderBy('transaction_date', 'desc')
+            ->get();
+
+        // Kirim data transaksi ke view
+        return view('history', compact('transactions'));
+    }
+
 
 }
