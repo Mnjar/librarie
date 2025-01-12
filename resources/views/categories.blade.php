@@ -4,8 +4,8 @@
 <div class="p-6 sm:ml-64 mt-10 h-auto w-full">
     <div class="flex justify-between items-center my-10">
         <form method="GET" action="{{ route('categories') }}">
-            <input class="p-2 border rounded w-1/2" placeholder="Search your book" type="text" name="search" value="{{ request()->search }}"/>
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Search</button>
+            <input class="p-2 border rounded w-1/2" placeholder="{{ __('messages.search_placeholder') }}" type="text" name="search" value="{{ request()->search }}"/>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">{{ __('messages.search') }}</button>
         </form>
     </div>
     <div class="flex mb-6 flex-wrap">
@@ -19,10 +19,10 @@
         <table class="w-full">
             <thead>
                 <tr class="text-sm text-gray-600">
-                    <th class="py-2 text-center">Book</th>
-                    <th class="py-2 text-center">Price</th>
-                    <th class="py-2 text-center">Stock</th>
-                    <th class="py-2 text-center">Action</th>
+                    <th class="py-2 text-center">{{ __("messages.book") }}</th>
+                    <th class="py-2 text-center">{{ __("messages.price") }}</th>
+                    <th class="py-2 text-center">{{ __("messages.stock") }}</th>
+                    <th class="py-2 text-center">{{ __("messages.action") }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -54,7 +54,7 @@
                                 <input type="hidden" name="book_id" value="{{ $book->id }}">
                                 <input type="hidden" name="transaction_type" value="borrow">
                                 <button type="submit" class="text-orange-600 mx-5 border rounded-md border-orange-600 py-2 px-4">
-                                    Rent
+                                    {{ __("messages.rent") }}
                                 </button>
                             </form>
 
@@ -64,7 +64,7 @@
                                 <input type="hidden" name="book_id" value="{{ $book->id }}">
                                 <input type="hidden" name="transaction_type" value="purchase">
                                 <button type="submit" class="text-green-600 mx-5 border rounded-md border-green-600 py-2 px-4">
-                                    Buy
+                                    {{ __("messages.buy") }}
                                 </button>
                             </form>
                         </td>

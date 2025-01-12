@@ -3,16 +3,16 @@
 @section('content')
 <div class="flex-1 p-6 bg-gray-100 sm:ml-64 mt-12">
     <div class="flex justify-between items-center mb-6">
-     <input class="w-1/2 p-2 border border-gray-300 rounded" placeholder="Search your book" type="text"/>
+     <input class="w-1/2 p-2 border border-gray-300 rounded" placeholder="{{ __("messages.search_placeholder") }}" type="text"/>
     </div>
     <div class="bg-white p-4 rounded shadow">
      <table class="w-full">
       <thead>
        <tr class="text-left text-gray-600">
-        <th class="py-2">Book</th>
-        <th class="py-2">Reservation Date</th>
-        <th class="py-2">Return Date</th>
-        <th class="py-2">Price</th>
+        <th class="py-2">{{ __("messages.book") }}</th>
+        <th class="py-2">{{ __("messages.reserve_date") }}</th>
+        <th class="py-2">{{ __("messages.return_date") }}</th>
+        <th class="py-2">{{ __("messages.price") }}</th>
        </tr>
       </thead>
       <tbody>
@@ -70,7 +70,7 @@
      </table>
     </div>
     <div class="py-3 text-purple-600">
-        <P class="text-lg font-bold">Total Price : Rp.360,000</P>
+        <P class="text-lg font-bold">{{ __("messages.total_price") }} : Rp.360,000</P>
     </div>
     <div class="py-1 flex justify-center lg:justify-start">
         <button class="border border-purple-600 rounded-md hover:text-white hover:bg-purple-600 text-purple-600">

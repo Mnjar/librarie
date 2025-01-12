@@ -8,12 +8,12 @@
     <div class="flex-1 p-6 mt-12 sm:ml-64">
         <div class="flex justify-center md:justify-between flex-col md:flex-row items-center mb-6">
             <form id="searchForm" class="w-full md:w-1/2">
-                <input class="w-full p-2 border border-gray-300 rounded" placeholder="Search your book" type="text"
+                <input class="w-full p-2 border border-gray-300 rounded" placeholder="{{ __("messages.search_placeholder") }}" type="text"
                     name="search" value="{{ request('search') }}" />
             </form>
         </div>
         <div>
-            <h2 class="text-xl font-bold mb-4">Book List</h2>
+            <h2 class="text-xl font-bold mb-4">{{ __("messages.book_list") }}</h2>
             <div class="flex flex-wrap mb-6 justify-center md:justify-start">
                 @forelse ($books as $book)
                     <a href="{{ route('product', $book->id) }}">
@@ -41,7 +41,7 @@
             </div>
         </div>
         <div>
-            <h2 class="text-xl font-bold mb-4">My Books</h2>
+            <h2 class="text-xl font-bold mb-4">{{ __("messages.my_books") }}</h2>
             <div class="flex flex-wrap justify-center md:justify-start mb-6">
                 @foreach ($booksFromTransactions as $book)
                     <div class="max-w-44 m-5 bg-white p-4 rounded-lg shadow">

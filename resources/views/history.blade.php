@@ -4,7 +4,7 @@
     <div class="flex-1 p-6 sm:ml-64 mt-12">
         <div class="flex justify-between items-center mb-6">
             <div class="flex items-center p-2">
-                <input class="w-full p-2 border border-gray-300 rounded" placeholder="Search your book" type="text" />
+                <input class="w-full p-2 border border-gray-300 rounded" placeholder="{{ __("messages.search_placeholder") }}" type="text" />
                 <i class="fas fa-search text-gray-500">
                 </i>
             </div>
@@ -16,9 +16,9 @@
             <table class="w-full">
                 <thead>
                     <tr class="text-left text-gray-600">
-                        <th class="pb-4">Book</th>
-                        <th class="pb-4">Transaction Date</th>
-                        <th class="pb-4">Transaction</th>
+                        <th class="pb-4">{{ __("messages.book") }}</th>
+                        <th class="pb-4">{{ __("messages.trans_date") }}</th>
+                        <th class="pb-4">{{ __("messages.trans") }}</th>
                         <th class="pb-4">Status</th>
                     </tr>
                 </thead>

@@ -2,14 +2,14 @@
 
 @section('content')
     <div class="max-w-2xl mx-auto mt-24">
-        <h2 class="text-2xl font-bold mb-4">Confirm Your Transaction</h2>
+        <h2 class="text-2xl font-bold mb-4">{{ __('messages.confirm_trans') }}</h2>
         <form id="paymentForm" action="{{ route('transactions.store') }}" method="POST">
             @csrf
             <input type="hidden" name="book_id" value="{{ $book->id }}">
             <input type="hidden" name="transaction_type" value="{{ $request->transaction_type }}">
 
             <div class="mb-4">
-                <label for="quantity" class="block text-gray-700">Quantity</label>
+                <label for="quantity" class="block text-gray-700">{{ __('messages.quantity') }}</label>
                 <input type="number" name="quantity" id="quantity" value="1" min="1"
                     class="w-full p-2 border rounded">
             </div>
@@ -18,7 +18,7 @@
 
             <!-- Pilihan alamat pengiriman -->
             <div class="mb-4">
-                <label for="shipping_address" class="block text-gray-700">Shipping Address</label>
+                <label for="shipping_address" class="block text-gray-700">{{ __("messages.ship_add") }}</label>
                 <select name="shipping_address" id="shipping_address" class="w-full p-2 border rounded">
                     @foreach (Auth::user()->address as $address)
                         <option value="{{ $address->id }}">{{ $address->address }}</option>
@@ -28,7 +28,7 @@
 
             <button type="button" id="pay-button"
                 class="w-full bg-purple-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800">
-                Proceed to Payment
+                {{ __('messages.proceed') }}
             </button>
         </form>
     </div>
