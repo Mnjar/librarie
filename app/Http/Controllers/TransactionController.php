@@ -11,6 +11,30 @@ use Midtrans\Config;
 
 class TransactionController extends Controller
 {
+    public function index(Request $request)
+    {
+        // Ambil ID pengguna yang sedang login
+        $userId = Auth::id();
+
+        // Ambil parameter pencarian dari request
+        $searchTerm = $request->input('search');
+
+        // Query reservasi berdasarkan user_id dan filter berdasarkan pencarian
+        $transactions = Transaction::where('user_id', $userId)
+            ->with(['book'])
+            ->when($searchTerm, function ($query, $searchTerm) {
+                return $query->whereHas('book', function ($query) use ($searchTerm) {
+                    $query->where('title', 'like', '%' . $searchTerm . '%')
+                        ->orWhere('author', 'like', '%' . $searchTerm . '%');
+                });
+            })
+            ->orderBy('transaction_date', 'desc')
+            ->get();
+
+        // Kirim data transaksi dan parameter pencarian ke view
+        return view('history', compact('transactions', 'searchTerm'));
+    }
+
     public function create(Request $request)
     {
         $book = Book::findOrFail($request->book_id);
@@ -116,21 +140,4 @@ class TransactionController extends Controller
 
         return response()->json(['message' => 'Stock updated successfully']);
     }
-
-    public function index()
-    {
-        // Ambil ID pengguna yang sedang login
-        $userId = Auth::id();
-
-        // Ambil semua transaksi berdasarkan user_id
-        $transactions = Transaction::where('user_id', $userId)
-            ->with(['book', 'fine'])
-            ->orderBy('transaction_date', 'desc')
-            ->get();
-
-        // Kirim data transaksi ke view
-        return view('history', compact('transactions'));
-    }
-
-
 }

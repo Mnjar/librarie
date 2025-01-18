@@ -1,0 +1,26 @@
+<?php
+
+return array (
+    'about' => 'Tentang Kami',
+    'vision' => 'Visi',
+    'contact_us' => 'Hubungi kami',
+    'languages' => 'Bahasa',
+    'english' => 'Inggris',
+    'indonesia' => 'Indonesia',
+    'welcome' => 'Selamat Datang di Librarie',
+    'description' => 'Lacak Buku Pinjaman Anda dan Kelola Librarie Anda. Temukan Buku Baru untuk Dipinjam dan Jelajahi Minat Anda. Jelajahi Beragam Pilihan Buku Digital dan Fisik. Pinjam dan Kembalikan Buku dengan Mudah, Kapanpun, Dimanapun.',
+    'contact' => 'Hubungi kami:',
+    'top_trending_books' => 'BUKU TREN TERATAS',
+    'borrow' => 'Meminjam',
+    'add_to_cart' => 'Tambahkan ke Keranjang',
+    'browse_genres' => 'JELAJAHI GENRE',
+    'see_all' => 'Lihat Semua',
+    'librarie_meetup' => 'PERTEMUAN Librarie',
+    'meetup_description' => 'Temui Pecinta Buku di Klub Buku Pertemuan Lokal! Fiksi Atau Non Fiksi, Paperback Atau Hardcover, Anda Suka? Baca Buku Baru Setiap Bulan.',
+    'books_collections' => 'Koleksi Buku',
+    'club_members' => 'Anggota Klub',
+    'groups_created' => 'Grup Dibuat',
+    'join_now' => 'Bergabunglah Sekarang',
+    'newsletter' => 'Berlangganan Buletin Kami',
+    'newsletter_description' => 'Update Buku Terbaru',
+);

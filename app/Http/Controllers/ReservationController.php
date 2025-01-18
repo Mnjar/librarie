@@ -2,91 +2,146 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Models\Reservation;
-use Illuminate\Http\Request;
+use Midtrans\Config;
+use Midtrans\Snap;
 use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
-    // Menampilkan daftar reservasi pengguna
-    // public function index()
-    // {
-    //     $reservations = Auth::user()->reservation()->with('book')->get();
-    //     return view('reservations.index', compact('reservations'));
-    // }
-
-    public function index()
+    public function index(Request $request)
     {
-        // $reservations = Auth::user()->reservation()->with('book')->get();
-        return view('reservation');
+        // Ambil ID pengguna yang sedang login
+        $userId = Auth::id();
+
+        // Ambil parameter pencarian dari request
+        $searchTerm = $request->input('search');
+
+        // Query reservasi berdasarkan user_id dan filter berdasarkan pencarian
+        $reservations = Reservation::where('user_id', $userId)
+            ->with(['book'])
+            ->when($searchTerm, function ($query, $searchTerm) {
+                return $query->whereHas('book', function ($query) use ($searchTerm) {
+                    $query->where('title', 'like', '%' . $searchTerm . '%')
+                        ->orWhere('author', 'like', '%' . $searchTerm . '%');
+                });
+            })
+            ->orderBy('reservation_date', 'desc')
+            ->get();
+
+        // Mengonversi tanggal ke objek Carbon jika belum otomatis
+        foreach ($reservations as $reservation) {
+            $reservation->reservation_date = \Carbon\Carbon::parse($reservation->reservation_date);
+            $reservation->return_date = \Carbon\Carbon::parse($reservation->return_date);
+        }
+
+        // Kirim data transaksi dan parameter pencarian ke view
+        return view('reservation', compact('reservations', 'searchTerm'));
     }
 
-    // Membuat reservasi baru
+    public function create(Request $request)
+    {
+        $book = Book::findOrFail($request->book_id);
+        return view('reservations.create', compact('book', 'request'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
             'book_id' => 'required|exists:books,id',
+            'shipping_address' => 'required|exists:addresses,id',
         ]);
 
         $book = Book::findOrFail($request->book_id);
+        $user = Auth::user();
 
-        if ($book->stock < 1) {
-            return back()->withErrors(['message' => 'Buku ini tidak tersedia untuk reservasi.']);
+        // Cek stok
+        if ($book->stock == 0) {
+            return response()->json(['message' => 'Insufficient stock'], 400);
         }
 
+        // Buat reservasi
         $reservation = Reservation::create([
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
             'book_id' => $book->id,
-            'reservation_date' => now(),
-            'status' => 'pending',
+            'reservation_date' => $request->reservation_date,
+            'return_date' => \Carbon\Carbon::parse($request->reservation_date)->addDays(7),
+            'payment_status' => 'pending',
+            'shipping_address' => $user->address()->findOrFail($request->shipping_address)->address,
+            'reservations_status' => 'borrowed',
         ]);
 
-        return redirect()->route('reservations.index')->with('success', 'Reservasi berhasil dibuat.');
+        // Konfigurasi Midtrans
+        Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
+
+        $params = [
+            'transaction_details' => [
+                'order_id' => $reservation->id,
+                'gross_amount' => $book->price * 0.25,
+            ],
+            'customer_details' => [
+                'first_name' => $user->name,
+                'email' => $user->email,
+            ],
+        ];
+
+        // Dapatkan Snap Token
+        $snapToken = Snap::getSnapToken($params);
+
+        return response()->json(['snap_token' => $snapToken]);
     }
 
-    // Pembaruan status oleh sistem (otomatis)
-    public function updateStatusBySystem()
+    public function notificationHandler(Request $request)
     {
-        // Ambil semua reservasi yang statusnya masih pending
-        $reservations = Reservation::where('status', 'pending')->get();
+        $notification = new \Midtrans\Notification();
 
-        foreach ($reservations as $reservation) {
+        $reservation = Reservation::findOrFail($notification->order_id);
+
+        if ($notification->transaction_status == 'settlement') {
+            $reservation->update(['payment_status' => 'paid', 'reservations_status' => 'borrowed']);  // Update status menjadi 'borrowed'
+
+            // Kurangi stok buku
             $book = $reservation->book;
-
-            // Periksa apakah buku tersedia (stock > 0)
-            if ($book->stock > 0) {
-                $reservation->status = 'approved';
-            } else {
-                $reservation->status = 'canceled';
-            }
-
-            // Simpan perubahan status
-            $reservation->save();
+            $book->decrement('stock', $reservation->quantity);
+        } elseif ($notification->transaction_status == 'pending') {
+            $reservation->update(['payment_status' => 'pending']);
+        } elseif ($notification->transaction_status == 'deny' || $notification->transaction_status == 'expire') {
+            $reservation->update(['payment_status' => 'failed']);
         }
 
-        return response()->json(['message' => 'Reservation statuses updated by system']);
+        return response()->json(['message' => 'Notification handled']);
     }
 
-    // Pembaruan status manual oleh admin
-    public function updateStatus(Request $request, $id)
+    public function successUpdate(Request $request)
     {
-        // Validasi input status
         $request->validate([
-            'status' => 'required|in:pending,approved,canceled',
+            'transaction_id' => 'required|exists:reservations,id',
         ]);
 
-        // Ambil reservasi berdasarkan ID
-        $reservation = Reservation::findOrFail($id);
+        $reservation = Reservation::findOrFail($request->transaction_id);
 
-        // Periksa apakah user yang mengakses adalah admin
-        if (Auth::user()->role !== 'admin') {
-            return redirect()->back()->with('error', 'You are not authorized to perform this action.');
+        if ($reservation->payment_status !== 'paid') {
+            $reservation->update(['payment_status' => 'paid', 'reservations_status' => 'borrowed']);  // Update status menjadi 'borrowed'
+
+            // Kurangi stok buku
+            $book = $reservation->book;
+            if ($book->stock > 0) {
+                $book->decrement('stock', 1);
+            } else {
+                return response()->json(['message' => 'Insufficient stock'], 400);
+            }
         }
 
-        // Update status reservasi
-        $reservation->update(['status' => $request->status]);
+        return response()->json(['message' => 'Stock updated successfully']);
+    }
 
-        return redirect()->route('reservations.index')->with('success', 'Reservation status updated successfully.');
+    public function success()
+    {
+        return view('reservations.success');
     }
 }

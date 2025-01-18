@@ -10,49 +10,6 @@
 </head>
 
 <body class="bg-gray-100 flex">
-    <!-- Sidebar -->
-    {{-- <div class="bg-indigo-100 w-1/5 min-h-screen p-4">
-     <div class="flex items-center mb-8">
-      <img alt="Library Logo" class="w-10 h-10 mr-2" height="40" src="{{ Logo.png }}" width="40"/>
-      <h1 class="text-xl font-bold text-indigo-600">Librarie</h1>
-     </div>
-     <nav>
-      <ul>
-       <li class="mb-4 flex items-center text-orange-500">
-        <i class="fas fa-tachometer-alt mr-2"></i>
-        <a href="dashboard.html">Dashboard</a>
-       </li>
-       <li class="mb-4 flex items-center text-gray-600">
-        <i class="fas fa-th-large mr-2"></i>
-        <a href="category.html">Categories</a>
-       </li>
-       <li class="mb-4 flex items-center text-gray-600">
-        <i class="fas fa-heart mr-2"></i>
-        <a href="favorite.html">Favourites</a>
-       </li>
-       <li class="mb-4 flex items-center text-gray-600">
-        <i class="fas fa-star mr-2"></i>
-        <a href="finest.html">Finest</a>
-       </li>
-       <li class="mb-4 flex items-center text-gray-600">
-        <i class="fas fa-calendar-alt mr-2"></i>
-        <a href="reservetion.html">Reservation</a>
-       </li>
-       <li class="mb-4 flex items-center text-gray-600">
-        <i class="fas fa-history mr-2"></i>
-        <a href="history.html">History</a>
-       </li>
-       <li class="mb-4 flex items-center text-gray-600">
-        <i class="fas fa-cog mr-2"></i>
-        <a href="setting.html">Settings</a>
-       </li>
-       <li class="mb-4 flex items-center text-gray-600">
-        <i class="fas fa-sign-out-alt mr-2"></i>
-        <a href="home.html">Logout</a>
-       </li>
-      </ul>
-     </nav>
-    </div> --}}
     <nav class="fixed top-0 z-50 w-full bg-white border-gray-200 dark:bg-purple-600 dark:border-gray-700">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
@@ -101,26 +58,16 @@
                                 </p>
                             </div>
                             <ul class="py-1" role="none">
-                                <li>
+                                {{-- <li>
                                     <a href="#"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                         role="menuitem">Profile</a>
+                                </li> --}}
+                                <li>
+                                    <a href="locale/en" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">English</a>
                                 </li>
                                 <li>
-                                    <form method="POST" action="{{ route('logout') }}">
-                                        @csrf
-                                        <button type="submit" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
-                                            Bahasa Indonesia
-                                        </button>
-                                    </form>
-                                </li>
-                                <li>
-                                    <form method="POST" action="{{ route('logout') }}">
-                                        @csrf
-                                        <button type="submit" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
-                                            English
-                                        </button>
-                                    </form>
+                                    <a href="locale/id" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">Indonesia</a>
                                 </li>
                                 <li>
                                     <form method="POST" action="{{ route('logout') }}">
@@ -200,7 +147,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('finestPage')}}"
+                    <a href="{{ route('finesIndex')}}"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 group hover:text-white"
                         style="width: 6.5rem">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">

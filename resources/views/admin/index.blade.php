@@ -12,7 +12,7 @@
         <!-- Navbar -->
         <nav class="bg-blue-600 text-white p-4">
             <div class="flex justify-between items-center">
-                <h1 class="text-xl font-bold">Admin Dashboard</h1>
+                <a href="{{ route('admin.dashboard') }}" class="text-xl font-bold text-white hover:text-blue-200">Admin Dashboard</a>
                 <a href="{{ route('admin.create') }}" class="text-white hover:text-blue-200">Add New Book</a>
                 <!-- Logout Form -->
                 <form action="{{ route('logout') }}" method="POST">
@@ -21,6 +21,7 @@
                 </form>
             </div>
         </nav>
+
 
         <!-- Books List -->
         <div class="p-6">
@@ -32,6 +33,7 @@
                         <th class="px-4 py-2 text-left">Title</th>
                         <th class="px-4 py-2 text-left">Author</th>
                         <th class="px-4 py-2 text-left">Category</th>
+                        <th class="px-4 py-2 text-left">Stock</th>
                         <th class="px-4 py-2 text-left">Actions</th>
                     </tr>
                 </thead>
@@ -56,6 +58,7 @@
                             <td class="px-4 py-2">{{ $book->title }}</td>
                             <td class="px-4 py-2">{{ $book->author }}</td>
                             <td class="px-4 py-2">{{ $book->category->name }}</td>
+                            <td class="px-4 py-2">{{ $book->stock }}</td>
                             <td class="px-4 py-2">
                                 <a href="{{ route('admin.edit', $book->id) }}" class="text-blue-600 hover:text-blue-800">Edit</a> |
                                 <form action="{{ route('admin.destroy', $book->id) }}" method="POST" style="display:inline;">

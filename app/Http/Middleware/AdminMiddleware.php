@@ -10,12 +10,15 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        // Memeriksa apakah pengguna terautentikasi dan memiliki role 'admin'
-        if (Auth::check() && Auth::user()->role === 'admin') {
-            return $next($request);
+        if (Auth::check()) {
+            \Log::info('User is authenticated: ' . Auth::user()->email);
+            if (Auth::user()->role === 'admin') {
+                return $next($request);
+            }
         }
 
-        // Jika bukan admin, arahkan ke halaman login atau halaman lain
+        \Log::info('Redirecting to admin login');
         return redirect()->route('admin.login')->withErrors(['email' => 'You are not authorized to access the admin panel.']);
     }
+
 }

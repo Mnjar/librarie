@@ -16,8 +16,8 @@ class Fine extends Model
         'status',
     ];
 
-    public function transaction()
+    public function reservation()
     {
-        return $this->belongsTo(Transaction::class);
+        return $this->belongsTo(Reservation::class);
     }
 }

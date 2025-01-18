@@ -31,8 +31,7 @@
         'proceed'=>'Proceed Payment',
         'payment_suc'=>'Payment Successful!',
         'thanks_purch'=>'Thank you for your purchase. Your transaction has been completed successfully.',
-        'back_dash'=>'Back To Dashboard'
+        'back_dash'=>'Back To Dashboard',
+        'no_fines'=>'You don\'t have any late fees.',
+        'reservation_status'=>'Reservation Status',
     ];
-
-
-?>

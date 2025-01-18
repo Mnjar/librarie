@@ -31,9 +31,9 @@
         'proceed'=>'Lanjutkan Pembayaran',
         'payment_suc'=>'Pembayaran Berhasil!',
         'thanks_purch'=>'Terimakasih Atas Pembeliannya. Transaksi Anda Telah Berhasil.',
-        'back_dash'=>'Kembali ke Dashboard'
-
+        'back_dash'=>'Kembali ke Dashboard',
+        'no_fines'=>'kamu tidak memiliki denda keterlambatan apapun.',
+        'resevation_status'=>'Status Reservasi',
     ];
 
 
-?>

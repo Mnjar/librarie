@@ -20,12 +20,12 @@
                         </form>
                     </div>
                     <div class="w-1/2 px-2">
-                        <form action="{{ route('transactions.create') }}" method="GET">
+                        <form action="{{ route('reservations.create') }}" method="GET">
                             @csrf
                             <input type="hidden" name="book_id" value="{{ $book->id }}">
                             <input type="hidden" name="transaction_type" value="borrow">
                             <button type="submit" class="w-full bg-gray-200 text-gray-800 py-2 px-4 rounded-full font-bold hover:bg-gray-300">
-                                Rent
+                                Rent (Rp.{{ $book->price * 0.25 }})
                             </button>
                         </form>
                     </div>

@@ -4,12 +4,11 @@
     <div class="flex-1 p-6 sm:ml-64 mt-12">
         <div class="flex justify-between items-center mb-6">
             <div class="flex items-center p-2">
-                <input class="w-full p-2 border border-gray-300 rounded" placeholder="{{ __("messages.search_placeholder") }}" type="text" />
-                <i class="fas fa-search text-gray-500">
-                </i>
-            </div>
-            <div class="flex items-center space-x-4">
-                {{-- <span class="text-gray-600">Thursday, 4 Desember 2024</span> --}}
+                <form action="{{ route('historyPage') }}" method="GET">
+                    <input class="w-1/1 p-2 border border-gray-300 rounded" placeholder="{{ __('messages.search_placeholder') }}"
+                        type="text" name="search" value="{{ old('search', $searchTerm) }}" />
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">{{ __('messages.search') }}</button>
+                </form>
             </div>
         </div>
         <div class="bg-white p-6 rounded shadow">

@@ -15,7 +15,7 @@
     </style>
 </head>
 
-<body class="bg-blue-600 flex items-center justify-center min-h-screen">
+<body class="bg-gray flex items-center justify-center min-h-screen">
     <div class="flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden max-w-4xl">
         <div class="bg-blue-600 text-white p-8 flex flex-col items-center justify-center md:w-1/2">
             <img alt="Logo" class="mb-4" height="100" src="{{ asset('assets/Logo.png') }}" width="100" />

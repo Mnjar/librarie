@@ -12,12 +12,13 @@ class BookController extends Controller
     public function dashboard()
     {
         // Mengambil data yang dibutuhkan untuk dashboard
+        $books = Book::all();
         $totalBooks = Book::count();
         $totalCategories = Category::count();
         $latestBooks = Book::latest()->take(5)->get();
 
         // Mengirim data ke view dashboard
-        return view('admin.dashboard', compact('totalBooks', 'totalCategories', 'latestBooks'));
+        return view('admin.dashboard', compact('totalBooks', 'totalCategories', 'latestBooks', 'books'));
     }
 
     // Menampilkan daftar buku
@@ -79,7 +80,7 @@ class BookController extends Controller
         $request->validate([
             'title' => 'required|string',
             'author' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,avif|max:2048',
             'image_url' => 'nullable|url', // Validasi URL
         ]);
 

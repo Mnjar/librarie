@@ -13,6 +13,9 @@ class Kernel extends ConsoleKernel
         // Menjadwalkan job untuk dijalankan setiap hari
         $schedule->job(new UpdateReservationStatus)->daily();
     }
+    protected $middlewareAliases = [
+        // Alias middleware lainnya
+        'localization' => \App\Http\Middleware\LocalizationMiddleware::class,
+    ];
 
-    
 }
